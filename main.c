@@ -18,7 +18,7 @@ test1 ()
   PROGMEM (mem)[4] = 0b00001101;
   PROGMEM (mem)[5] = 0b00101111;
 
-  /* jmp ===> 1001 010k kkkk 110k kkkk */
+  /* jmp ===> 1001 010k kkkk 110k kkkk kkkk kkkk kkkk */
   /* jmp 0 */
   PROGMEM (mem)[6] = 0b10010100;
   PROGMEM (mem)[7] = 0b00001100;
@@ -40,10 +40,19 @@ test1 ()
   free (cpu);
 }
 
+void
+test2 ()
+{
+  printf ("%u\n", LDI_Rr_K (18, 4));
+  printf ("%u\n", LDI_Rr_K (15, 32));
+  printf ("%u\n", ADD_Rd_Rr (18, 15));
+  printf ("%u\n", JMP_K (0));
+}
+
 int
 main (int argc, char **argv)
 {
   printf ("Hello, from atmega33!\n");
-  test1 ();
+  test2 ();
   return !printf ("Program Ended!\n");
 }

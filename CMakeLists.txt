@@ -5,5 +5,7 @@ add_executable(atmega33
     header.h
     memory.h memory.c
     cpu.h cpu.c
+    instgen.h
+    opcode.h
     main.h main.c)
 
