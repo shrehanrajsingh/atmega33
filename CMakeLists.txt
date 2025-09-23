@@ -4,5 +4,6 @@ project(atmega33 VERSION 0.1.0 LANGUAGES C)
 add_executable(atmega33
     header.h
     memory.h memory.c
-    main.c)
+    cpu.h cpu.c
+    main.h main.c)
 

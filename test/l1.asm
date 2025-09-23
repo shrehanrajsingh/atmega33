@@ -1,0 +1,20 @@
+.INCLUDE "M32DEF.INC"
+.ORG 0
+
+; LDI (Load Data Immediate)
+LDI R16, 0x200
+LDI R17, 0x300
+ADD R16, R17
+
+; LDS (Load Data from Storage Space)
+.EQU MEMORY = 0x300
+LDS R16, MEMORY
+LDI R17, 50
+ADD R16, R17
+STS MEMORY, R16
+
+; STS (Store To data Space)
+LDI R16, 0x67
+STS MEMORY, R16
+
+.EQU PORTB = 0x1B

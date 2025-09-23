@@ -3,16 +3,11 @@
 
 #include "header.h"
 
-/* SRAM */
-typedef struct
-{
-  char v[1 << 11];
-} sram_t;
-
 /* Flash */
+#define FLASH_SIZE 1 << 15
 typedef struct
 {
-  char v[1 << 32];
+  char v[FLASH_SIZE];
 } flash_t;
 
 /* Program Memory Map */
@@ -27,10 +22,10 @@ typedef struct
 
 /* Data Memory Map */
 #define RFIOM_LOCS_SIZE 96
+#define SRAM_INT_SIZE 2048
 typedef struct
 {
-  char rfiom_locs[RFIOM_LOCS_SIZE];
-  char v[2048];
+  char v[RFIOM_LOCS_SIZE + SRAM_INT_SIZE];
 } dmm_t;
 
 /* Memory Layouts */
@@ -84,14 +79,22 @@ typedef struct
 #define RAMEND 0x85F
 #define SP_START RAMEND
 
-/* Implement EEPROM */
+/* EEPROM */
+#define EEPROM_SIZE 1024
+typedef struct
+{
+  char v[EEPROM_SIZE];
+} eeprom_t;
 
 /* memory */
+
+#define PROGMEM(X) ((X).pmm.flash.v)
+#define DATAMEM(X) ((X).dmm.v)
 typedef struct
 {
   dmm_t dmm;
   pmm_t pmm;
-  /* eeprom_t eeprom */
+  eeprom_t eeprom;
 } mem_t;
 
 #if defined(__cplusplus)
@@ -99,7 +102,7 @@ extern "C"
 {
 #endif // __cplusplus
 
-  void stack_write (mem_t *, char);
+  void stack_push (mem_t *, char);
   char stack_peep (mem_t *);
   void stack_pop (mem_t *, char);
 
