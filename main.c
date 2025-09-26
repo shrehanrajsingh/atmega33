@@ -47,6 +47,7 @@ test2 ()
   printf ("%u\n", LDI_Rr_K (15, 32));
   printf ("%u\n", ADD_Rd_Rr (18, 15));
   printf ("%u\n", JMP_K (0));
+  printf ("%u\n", LDS_Rd_K (16, 300));
 }
 
 int

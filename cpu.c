@@ -80,6 +80,42 @@ cpu_ip_start (cpu_t *cpu)
           goto update_pc;
         }
 
+      /* lds */
+      if (((b1 >> 1) & 0x7F) == 0b1001000 && (b2 & 0xF) == 0)
+        {
+          /* lds: 1001 000d dddd kkkk kkkk kkkk kkkk */
+          printf ("found lds\n");
+
+          ++pc;
+          char b3 = pma (++pc);
+          char b4 = pma (++pc);
+
+          int k_loc = (int)b4 | ((int)b3 << 8);
+
+          char r = b2 | ((b1 & 0x1) << 5);
+          dma (r) = dma (k_loc);
+
+          goto update_pc;
+        }
+
+      /* sts */
+      if (((b1 >> 1) & 0x7F) == 0b1001001 && (b2 & 0xF) == 0)
+        {
+          /* sts: 1001 001r rrrr 0000 kkkk kkkk kkkk kkkk */
+          printf ("found sts\n");
+
+          ++pc;
+          char b3 = pma (++pc);
+          char b4 = pma (++pc);
+
+          int k_loc = (int)b4 | ((int)b3 << 8);
+
+          char r = b2 | ((b1 & 0x1) << 5);
+          dma (k_loc) = dma (r);
+
+          goto update_pc;
+        }
+
     update_pc:
       //   cpu->pch = (pc >> 8) & 0xFF;
       //   cpu->pcl = pc & 0xFF;
