@@ -41,6 +41,23 @@ test1 ()
 }
 
 void
+add_mem (mem_t *m, int *c, abl_byte b)
+{
+  if (b.size == 2)
+    {
+      PROGMEM (*m)[(*c)++] = (b.val >> 8) & 0xFF;
+      PROGMEM (*m)[(*c)++] = b.val & 0xFF;
+    }
+  else if (b.size == 4)
+    {
+      PROGMEM (*m)[(*c)++] = (b.val >> 24) & 0xFF;
+      PROGMEM (*m)[(*c)++] = (b.val >> 16) & 0xFF;
+      PROGMEM (*m)[(*c)++] = (b.val >> 8) & 0xFF;
+      PROGMEM (*m)[(*c)++] = b.val & 0xFF;
+    }
+}
+
+void
 test2 ()
 {
   printf ("%u\n", LDI_Rr_K (18, 4));
@@ -50,10 +67,35 @@ test2 ()
   printf ("%u\n", LDS_Rd_K (16, 300));
 }
 
+void
+test3 ()
+{
+  mem_t mem;
+  int c = 0;
+
+  add_mem (&mem, &c, abl_codegen_fromline ("LDI R20, 10"));
+  add_mem (&mem, &c, abl_codegen_fromline ("LDI R21, 20"));
+  add_mem (&mem, &c, abl_codegen_fromline ("ADD R20, R21"));
+  add_mem (&mem, &c, abl_codegen_fromline ("JMP 0"));
+
+  cpu_t *cpu = cpu_new ();
+  *cpu->mem = mem;
+
+  cpu_ip_start (cpu);
+
+  for (int i = 0; i < 32; i++)
+    {
+      printf ("r%d: %d\n", i, DATAMEM (*cpu->mem)[i]);
+    }
+
+  cpu_destroy (cpu);
+  free (cpu);
+}
+
 int
 main (int argc, char **argv)
 {
   printf ("Hello, from atmega33!\n");
-  test2 ();
+  test3 ();
   return !printf ("Program Ended!\n");
 }
