@@ -7,5 +7,6 @@
 #include "instgen.h"
 #include "memory.h"
 #include "opcode.h"
+#include "tui.h"
 
 #endif // MAIN_H

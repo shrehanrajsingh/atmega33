@@ -8,5 +8,6 @@ add_executable(atmega33
     instgen.h
     opcode.h
     assembler.h assembler.c
+    tui.h tui.c
     main.h main.c)
 

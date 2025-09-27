@@ -92,10 +92,25 @@ test3 ()
   free (cpu);
 }
 
+void
+test4 ()
+{
+  tui_init ();
+
+  tui_ctx_t *ctx = tui_new (80, 24);
+  tui_disp (ctx);
+
+  tui_destroy (ctx);
+  free (ctx);
+
+  tui_kill ();
+}
+
 int
 main (int argc, char **argv)
 {
-  printf ("Hello, from atmega33!\n");
-  test3 ();
-  return !printf ("Program Ended!\n");
+  // printf ("Hello, from atmega33!\n");
+  test4 ();
+  // return !printf ("Program Ended!\n");
+  return 0;
 }
