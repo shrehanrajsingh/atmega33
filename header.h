@@ -7,4 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if !defined(DBG)
+#define DBG(X) X
+#endif // DBG
+
 #endif // HEADER_H

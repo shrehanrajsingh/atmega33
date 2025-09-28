@@ -40,6 +40,15 @@ extern "C"
    */
   abl_byte abl_codegen_fromline (char *);
 
+  /**
+   * Convert file contents to bytecode array
+   * This routine takes into account macros and directives
+   * and generates a bytecode array.
+   * @param contents File contents
+   * @return Generated stream of bytecode
+   */
+  abl_byte *abl_codegen_fromfile (char *_Contents);
+
 #if defined(__cplusplus)
 }
 #endif // __cplusplus

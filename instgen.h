@@ -5,7 +5,7 @@
 
 /* ldi: 1110 kkkk rrrr kkkk */
 #define LDI_Rr_K(r, K)                                                        \
-  (0b1110 << 12) | (((int)((K) >> 4) & 0xF) << 8) | ((((r) - 15) & 0xF) << 4) \
+  (0b1110 << 12) | (((int)((K) >> 4) & 0xF) << 8) | ((((r) - 16) & 0xF) << 4) \
       | (K & 0xF)
 
 /* add: 0000 11rd dddd rrrr */

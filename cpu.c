@@ -25,6 +25,7 @@ cpu_ip_start (cpu_t *cpu)
 
   while (pc != 0 || !one_cycle) /* only run for one program loop for now
                                  */
+                                // while (1)
     {
       one_cycle++;
       char b1 = pma (pc);
@@ -35,11 +36,11 @@ cpu_ip_start (cpu_t *cpu)
         {
           /* ldi: 1110 kkkk rrrr kkkk */
 
-          printf ("found ldi\n");
+          DBG (printf ("found ldi\n"));
           char k = ((b1 & 0xF) << 4) | (b2 & 0xF);
           char r = (b2 >> 4) & 0xF;
 
-          dma (r + 15) = k;
+          dma (r + 16) = k;
 
           pc += 2;
           goto update_pc;
@@ -50,7 +51,7 @@ cpu_ip_start (cpu_t *cpu)
         {
           /* add: 0000 11rd dddd rrrr */
 
-          printf ("found add\n");
+          DBG (printf ("found add\n"));
           char r = (((b1 >> 1) & 0x1) << 4) | (b2 & 0xF);
           char d = ((b1 & 0x1) << 4) | ((b2 >> 4) & 0xF);
 
@@ -68,14 +69,14 @@ cpu_ip_start (cpu_t *cpu)
         {
           /* jmp: 1001 010k kkkk 110k kkkk kkkk kkkk kkkk */
 
-          printf ("found jmp\n");
+          DBG (printf ("found jmp\n"));
           char b3 = pma (pc + 2);
           char b4 = pma (pc + 3);
 
           int j = b4 | ((int)b3 << 8) | ((b2 & 0x1) << 16)
                   | (((b2 >> 4) & 0xF) << 17) | ((b1 & 0x1) << 21);
 
-          printf ("%d\n", j);
+          // DBG (printf ("%d\n", j));
           pc = j;
           goto update_pc;
         }
@@ -84,7 +85,7 @@ cpu_ip_start (cpu_t *cpu)
       if (((b1 >> 1) & 0x7F) == 0b1001000 && (b2 & 0xF) == 0)
         {
           /* lds: 1001 000d dddd kkkk kkkk kkkk kkkk */
-          printf ("found lds\n");
+          DBG (printf ("found lds\n"));
 
           ++pc;
           char b3 = pma (++pc);
@@ -102,7 +103,7 @@ cpu_ip_start (cpu_t *cpu)
       if (((b1 >> 1) & 0x7F) == 0b1001001 && (b2 & 0xF) == 0)
         {
           /* sts: 1001 001r rrrr 0000 kkkk kkkk kkkk kkkk */
-          printf ("found sts\n");
+          DBG (printf ("found sts\n"));
 
           ++pc;
           char b3 = pma (++pc);

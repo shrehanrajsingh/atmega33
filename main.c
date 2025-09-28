@@ -106,11 +106,66 @@ test4 ()
   tui_kill ();
 }
 
+void
+test5 ()
+{
+  FILE *f = fopen ("../test/test.asm", "r");
+  if (f == NULL)
+    {
+      printf ("Error opening file test.asm\n");
+      return;
+    }
+
+  fseek (f, 0, SEEK_END);
+  long fs = ftell (f);
+  fseek (f, 0, SEEK_SET);
+
+  char *fcont = (char *)malloc (fs + 2);
+  if (fcont == NULL)
+    {
+      printf ("Memory allocation failed\n");
+      fclose (f);
+      return;
+    }
+
+  size_t read_size = fread (fcont, 1, fs, f);
+  fcont[read_size++] = '\n';
+  fcont[read_size] = '\0';
+
+  fclose (f);
+
+  abl_byte *code = abl_codegen_fromfile (fcont);
+  mem_t mem;
+  int c = 0;
+
+  while (code->size)
+    {
+      add_mem (&mem, &c, *code);
+      code++;
+    }
+
+  cpu_t *cpu = cpu_new ();
+  *cpu->mem = mem;
+
+  cpu_ip_start (cpu);
+
+  for (int i = 0; i < 32; i++)
+    {
+      printf ("r%d: %d\n", i, DATAMEM (*cpu->mem)[i]);
+    }
+
+  cpu_destroy (cpu);
+  free (cpu);
+
+  free (fcont);
+}
+
 int
 main (int argc, char **argv)
 {
   // printf ("Hello, from atmega33!\n");
-  test4 ();
+  // test4 ();
+  test5 ();
   // return !printf ("Program Ended!\n");
   return 0;
 }
