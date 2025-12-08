@@ -23,9 +23,7 @@ cpu_ip_start (cpu_t *cpu)
   int pc = cpu->pc;
   int one_cycle = 0;
 
-  while (pc != 0 || !one_cycle) /* only run for one program loop for now
-                                 */
-                                // while (1)
+  while (1)
     {
       one_cycle++;
       char b1 = pma (pc);
