@@ -8,7 +8,7 @@ This project is primarily intended for learning, testing, and experimentation ra
 
 ## What is ATmega32?
 
-The ATmega32 is a member of Microchip/Atmel’s AVR 8-bit microcontroller family. It is commonly used in embedded systems and educational projects. The microcontroller features:
+The ATmega32 is a member of Microchip/Atmel's AVR 8-bit microcontroller family. It is commonly used in embedded systems and educational projects. The microcontroller features:
 
 - 8-bit RISC CPU core
 - 32 x 8-bit general-purpose registers (R0–R31)
@@ -27,6 +27,23 @@ The emulator models the essential CPU components required to execute AVR firmwar
 - Program counter (PC) and stack pointer (SP)
 - Status register (SREG) and a minimal set of flags relevant to supported arithmetic instructions
 - Instruction decode & execute loop with support for a subset of opcodes
+
+## Features
+
+### Interactive Debugger (NEW!)
+
+The emulator now includes a comprehensive interactive debugger with:
+
+- **Step-by-step execution**: Execute one instruction at a time or N instructions
+- **Breakpoints**: Set up to 16 breakpoints with labels and hit counting
+- **Register inspection**: View all registers, specific registers, or only changed registers
+- **Memory inspection**: Examine both data memory (SRAM) and program memory (Flash)
+- **Disassembly**: View disassembled instructions at any address
+- **Execution statistics**: Track total instructions executed, cycles, and breakpoint hits
+- **Register watching**: Automatically track which registers change between steps
+- **20+ interactive commands**: Full control over program execution and inspection
+
+See [DEBUGGER.md](DEBUGGER.md) for comprehensive debugger documentation.
 
 ## Implemented Instructions
 
@@ -106,13 +123,44 @@ Run the emulator:
     ```
     ./atmega33
     ```
-    (Windows: build\Debug\atmega33.exe or build\atmega33.exe depending on generator/config.)
+    (Windows: build\\Debug\\atmega33.exe or build\\atmega33.exe depending on generator/config.)
 - From the repository root (if the program expects relative paths):
     ```
     ./build/atmega33
     ```
 
-If you see an error like “can't find file”, it usually means the emulator expects test files relative to the current working directory. Either run the binary from the build directory, pass an explicit path to the input file (if supported), or run the one in the build folder from the repository root as shown above.
+If you see an error like "can't find file", it usually means the emulator expects test files relative to the current working directory. Either run the binary from the build directory, pass an explicit path to the input file (if supported), or run the one in the build folder from the repository root as shown above.
+
+### Using the Debugger
+
+The emulator includes an interactive debugger. Quick start:
+
+```
+$ ./atmega33
+
+=== ATMega33 Interactive Debugger ===
+Type 'help' for available commands
+
+(dbg) help
+[Shows all available commands]
+
+(dbg) break 0x0000 start
+Breakpoint 0 set at address 0x0000 (start)
+
+(dbg) watch on
+Register watching enabled
+
+(dbg) step
+Stepping one instruction...
+
+(dbg) registers
+[Shows all register values]
+
+(dbg) disasm
+[Shows disassembly around PC]
+```
+
+See [DEBUGGER.md](DEBUGGER.md) for complete documentation.
 
 ## Contribution
 
@@ -124,6 +172,6 @@ Please fork the repository, create a topic branch for your change, and open a pu
 - AVR Instruction Set Manual — detailed instruction descriptions, formats, and opcode encodings
 - AVR libc and avr-gcc documentation for toolchain and assembly usage
 - AVR Freaks (community) and official Microchip documentation for examples and application notes
-- Open-source AVR emulators and educational projects (search for “AVR emulator” or “avr simulator”) for reference implementations
+- Open-source AVR emulators and educational projects (search for "AVR emulator" or "avr simulator") for reference implementations
 
-If you want links to specific documentation files (datasheets or manuals), let me know and I’ll add URLs based on the latest resources.
+If you want links to specific documentation files (datasheets or manuals), let me know and I'll add URLs based on the latest resources.
