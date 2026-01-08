@@ -9,5 +9,6 @@ add_executable(atmega33
     opcode.h
     assembler.h assembler.c
     tui.h tui.c
+    debugger.h debugger.c
     main.h main.c)
 
